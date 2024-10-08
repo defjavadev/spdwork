@@ -1,0 +1,130 @@
+import java.util.Scanner;
+
+interface Engine {
+    void describe();
+}
+
+interface Wheels {
+    void describe();
+}
+
+interface Interior {
+    void describe();
+}
+
+class V6Engine implements Engine {
+    @Override
+    public void describe() {
+        System.out.println("V6 Engine");
+    }
+}
+
+class V8Engine implements Engine {
+    @Override
+    public void describe() {
+        System.out.println("V8 Engine");
+    }
+}
+
+class StandardWheels implements Wheels {
+    @Override
+    public void describe() {
+        System.out.println("Standard Wheels");
+    }
+}
+
+class OffRoadWheels implements Wheels {
+    @Override
+    public void describe() {
+        System.out.println("Off-Road Wheels");
+    }
+}
+
+class LeatherInterior implements Interior {
+    @Override
+    public void describe() {
+        System.out.println("Leather Interior");
+    }
+}
+
+class ClothInterior implements Interior {
+    @Override
+    public void describe() {
+        System.out.println("Cloth Interior");
+    }
+}
+
+interface CarFactory {
+    Engine createEngine();
+    Wheels createWheels();
+    Interior createInterior();
+}
+
+class SedanCarFactory implements CarFactory {
+    @Override
+    public Engine createEngine() {
+        return new V6Engine();
+    }
+
+    @Override
+    public Wheels createWheels() {
+        return new StandardWheels();
+    }
+
+    @Override
+    public Interior createInterior() {
+        return new LeatherInterior();
+    }
+}
+
+class SUVCarFactory implements CarFactory {
+    @Override
+    public Engine createEngine() {
+        return new V8Engine();
+    }
+
+    @Override
+    public Wheels createWheels() {
+        return new OffRoadWheels();
+    }
+
+    @Override
+    public Interior createInterior() {
+        return new ClothInterior();
+    }
+}
+
+public class Client {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choose the type of car: 1 - Sedan, 2 - SUV");
+        int carType = scanner.nextInt();
+
+        CarFactory carFactory;
+        if (carType == 1) {
+            carFactory = new SedanCarFactory();
+        } else {
+            carFactory = new SUVCarFactory();
+        }
+
+        System.out.println("Choose the engine type: 1 - V6, 2 - V8");
+        int engineType = scanner.nextInt();
+        Engine engine = (engineType == 1) ? carFactory.createEngine() : new V8Engine();
+
+        System.out.println("Choose the type of wheels: 1 - Standard, 2 - Off-Road");
+        int wheelsType = scanner.nextInt();
+        Wheels wheels = (wheelsType == 1) ? carFactory.createWheels() : new OffRoadWheels();
+
+        System.out.println("Choose the type of interior: 1 - Leather, 2 - Cloth");
+        int interiorType = scanner.nextInt();
+        Interior interior = (interiorType == 1) ? carFactory.createInterior() : new ClothInterior();
+
+        System.out.println("Selected car configuration:");
+        engine.describe();
+        wheels.describe();
+        interior.describe();
+
+        scanner.close();
+    }
+}
